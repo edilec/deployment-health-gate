@@ -1,13 +1,15 @@
 {
   "name": "deployment-health-gate",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Gate deployment on health signals with a readable reason for each decision.",
   "type": "module",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test"
+    "lint": "node --check bin/deployment-health-gate.mjs && node --check src/index.mjs",
+    "test": "node --test",
+    "check": "npm run lint && npm test"
   },
   "license": "MIT",
   "repository": {

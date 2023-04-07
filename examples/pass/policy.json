@@ -1,0 +1,1 @@
+{"schemaVersion":"1","policyVersion":"v1","observationWindowMs":60000,"minSamples":2,"noData":"incomplete","requiredMetrics":[{"name":"error_rate","max":0.02}]}
