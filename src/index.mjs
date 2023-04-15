@@ -46,7 +46,7 @@ export function evaluateHealth(policy,capture,{now=()=>performance.now()}={}){
     checked++;
     for(const [j,metric] of policy.requiredMetrics.entries()){
       const value=item.metrics[metric.name];
-      if(value===undefined){findings.push(finding('metric-missing','@capture',`${pointer}/metrics`));continue;}
+      if(!Object.hasOwn(item.metrics,metric.name)){findings.push(finding('metric-missing','@capture',`${pointer}/metrics`));continue;}
       counts.set(metric.name,counts.get(metric.name)+1);
       if(value>metric.max)findings.push(finding('threshold-exceeded','@capture',`${pointer}/metrics`));
     }

@@ -14,6 +14,14 @@ test('bad required sample blocks, missing required metric remains unknown',()=>{
   const d=capture();d.samples[1].metrics.error_rate=0.03;let r=evaluateHealth(policy(),d,{now:()=>0});assert.equal(r.status,'fail');assert.equal(r.decision,'block');assert.equal(r.findings[0].ruleId,'threshold-exceeded');
   delete d.samples[1].metrics.error_rate;r=evaluateHealth(policy(),d,{now:()=>0});assert.equal(r.status,'incomplete');assert.equal(r.decision,'unknown');assert.ok(r.findings.some(x=>x.ruleId==='metric-missing'));
 });
+test('required metric must be an own exported field, not an inherited prototype property',()=>{
+  for(const name of ['constructor','toString','valueOf']){
+    const p=policy(),d=capture();p.minSamples=1;p.requiredMetrics=[{name,max:1}];for(const sample of d.samples)sample.metrics={};
+    let r=evaluateHealth(p,d,{now:()=>0});assert.equal(r.status,'incomplete',name);assert.ok(r.findings.some(x=>x.ruleId==='metric-missing'));
+    for(const sample of d.samples)sample.metrics=Object.fromEntries([[name,0.5]]);
+    r=evaluateHealth(p,d,{now:()=>0});assert.equal(r.status,'pass',name);
+  }
+});
 test('no-data policy explicitly chooses incomplete or fail, never pass',()=>{
   const d=capture();d.samples=[];let r=evaluateHealth(policy(),d,{now:()=>0});assert.equal(r.status,'incomplete');assert.equal(r.findings[0].ruleId,'no-data');const p=policy();p.noData='fail';r=evaluateHealth(p,d,{now:()=>0});assert.equal(r.status,'fail');assert.equal(r.decision,'block');
 });
