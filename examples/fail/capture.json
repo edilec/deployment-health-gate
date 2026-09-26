@@ -1,0 +1,1 @@
+{"schemaVersion":"1","complete":true,"observedAt":"2026-09-25T10:00:00Z","samples":[{"id":"s1","at":"2026-09-25T09:59:00Z","metrics":{"error_rate":0.01}},{"id":"s2","at":"2026-09-25T10:00:00Z","metrics":{"error_rate":0.03}}]}
